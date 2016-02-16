@@ -1,0 +1,13 @@
+html, body {
+  height: 100%; }
+
+.code-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%; }
+
+.editor {
+  flex: 1 0 0;
+  border: 1px solid gray; }
+
+/*# sourceMappingURL=style.css.map */
