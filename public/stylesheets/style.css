@@ -5,9 +5,23 @@ html, body {
   display: flex;
   flex-direction: column;
   height: 100%; }
+  @media screen and (min-width: 800px) {
+    .code-container {
+      flex-direction: row; } }
 
 .editor {
   flex: 1 0 0;
-  border: 1px solid gray; }
+  display: flex;
+  flex-direction: column;
+  border: 1px solid gray;
+  font-size: 14px; }
+
+.editor-name {
+  font-size: 16px;
+  padding: 4px;
+  margin: 0; }
+
+#editor-html, #editor-css, #editor-javascript {
+  flex: 1 0 100%; }
 
 /*# sourceMappingURL=style.css.map */
