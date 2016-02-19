@@ -2,20 +2,30 @@ var app = {
 
   init: function() {
     this.initEditors();
+    this.listenForChanges();
   },
 
-  // Which editors we will use
-  editors: ['html', 'javascript', 'css'],
+  editors: {
+    html: {},
+    javascript: {},
+    css: {}
+  },
 
   // Initializes editor areas with Ace editor
   initEditors: function() {
-    var editor;
-    for (var i = 0; i < this.editors.length; i++) {
-      editor = ace.edit('editor-' + this.editors[i]);
-      editor.setTheme("ace/theme/chrome");
-      editor.session.setMode("ace/mode/" + this.editors[i]);
+    for (var editor in this.editors) {
+      this.editors[editor] = ace.edit('editor-' + editor);
+      this.editors[editor].setTheme("ace/theme/chrome");
+      this.editors[editor].session.setMode("ace/mode/" + editor);
     };
+  },
+
+  listenForChanges: function() {
+    $('#js-save').on('click', function(){
+      $("#result").contents().find('html').html(app.editors.html.getValue());
+    });
   }
+
 }
 
 $(document).ready(function() {
