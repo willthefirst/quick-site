@@ -7,8 +7,8 @@ var app = {
 
   editors: {
     html: {},
-    javascript: {},
-    css: {}
+    css: {},
+    javascript: {}
   },
 
   // Initializes editor areas with Ace editor
@@ -21,8 +21,11 @@ var app = {
   },
 
   listenForChanges: function() {
-    $('#js-save').on('click', function(){
+    // When HTML gets saved
+    $('#refresh').on('click', function(){
       $("#result").contents().find('html').html(app.editors.html.getValue());
+      $("#result").contents().find('head').append('<style id="user-css">' + app.editors.css.getValue() + '</style>' )
+      $("#result").contents().find('head').append('<script id="user-js">' + app.editors.javascript.getValue() + '</script>' )
     });
   }
 
