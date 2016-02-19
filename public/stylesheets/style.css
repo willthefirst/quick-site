@@ -1,19 +1,28 @@
 html, body {
   height: 100%; }
 
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  height: 100%; }
+
 .code-container {
   display: flex;
   flex-direction: column;
+  flex: 1 1 50%;
   height: 100%; }
   @media screen and (min-width: 800px) {
     .code-container {
       flex-direction: row; } }
 
+.result-container {
+  flex: 1 1 50%; }
+
 .editor {
   flex: 1 0 0;
   display: flex;
   flex-direction: column;
-  border: 1px solid gray;
+  border-right: 1px solid gray;
   font-size: 14px; }
 
 .editor-name {
