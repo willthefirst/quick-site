@@ -1,5 +1,6 @@
 var express = require('express');
 var bodyParser  = require('body-parser');
+var subdomain = require('express-subdomain');
 var app = express();
 
 app.set('port', (process.env.PORT || 5000));
@@ -24,10 +25,12 @@ app.get('/result', function(request, response) {
 });
 
 app.post('/updatePage', function(request, response) {
-  console.log(request.body);
   response.send(request.body);
 
-  // create a subdomain according (fixed name for now) that contains nothing but the submitted html.
+  // bitbaloon this shit https://github.com/BitBalloon/bitballoon-js
+
+  
+
 });
 
 app.listen(app.get('port'), function() {

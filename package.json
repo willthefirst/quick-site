@@ -26,6 +26,7 @@
   "devDependencies": {
     "body-parser": "^1.15.0",
     "connect": "^3.4.1",
+    "express-subdomain": "^1.0.4",
     "sass": "^0.5.0"
   }
 }
