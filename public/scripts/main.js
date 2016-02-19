@@ -23,9 +23,17 @@ var app = {
   listenForChanges: function() {
     // When HTML gets saved
     $('#refresh').on('click', function(){
+
+      // Update the immediate frame
       $("#result").contents().find('html').html(app.editors.html.getValue());
-      $("#result").contents().find('head').append('<style id="user-css">' + app.editors.css.getValue() + '</style>' )
-      $("#result").contents().find('head').append('<script id="user-js">' + app.editors.javascript.getValue() + '</script>' )
+      $("#result").contents().find('head').append('<style id="user-css">' + app.editors.css.getValue() + '</style>');
+      $("#result").contents().find('head').append('<script id="user-js">' + app.editors.javascript.getValue() + '</script>');
+
+      // Update the real shit
+      $.post("/updatePage", { fullDOM : $("#result").contents().find('html')[0].outerHTML }, function(data) {
+        console.log(data);
+      });
+
     });
   }
 
