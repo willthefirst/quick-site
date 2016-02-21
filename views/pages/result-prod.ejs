@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Testing</title>
+    <script src="/scripts/vendor/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+     $(document).ready(function() {
+       var bing = $.parseHTML('<%= result %>');
+       var bang = bing[0].nodeValue;
+       document.write(bang);
+     });
+    </script>
+  </head>
+  <body>
+
+  </body>
+</html>
