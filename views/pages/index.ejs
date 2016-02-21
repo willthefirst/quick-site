@@ -9,6 +9,7 @@
       <section class="editor">
         <h2 class="editor-name">HTML
           <button type="button" id="refresh" name="button">SAVE</button></h2>
+          <input type="text" name="subdomain" id="site-subdomain" value="<%= subdomain %>">
         <div id="editor-html"></div>
       </section>
       <section class="editor">
@@ -21,7 +22,7 @@
       </section>
     </div>
     <div class="result-container">
-      <iframe id="result" src="/result"></iframe>
+      <iframe id="result" src="<%= resultURL %>"></iframe>
     </div>
   </main>
 </body>

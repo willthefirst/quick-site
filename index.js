@@ -2,7 +2,7 @@ var express = require('express');
 var bodyParser  = require('body-parser');
 var app = express();
 var mongoose = require('mongoose');
-
+var moniker = require('moniker');
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -14,7 +14,6 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.use( require('express-subdomain-handler')({ baseUrl: 'example.com', prefix: 'myprefix', logger: true }) );
-
 
 // views is directory for all template files
 app.set('views', __dirname + '/views');
@@ -32,16 +31,27 @@ var userSite = new Schema({
 
 var Site = mongoose.model('Site', userSite);
 
+var randomName = moniker.generator([moniker.noun, moniker.noun, moniker.verb]);
 
+var concatenateHTML = function(html, css, js) {
+  
+}
+
+
+
+// Routes
+
+// Homepage -> new editor with random name
 app.get('/', function(request, response) {
-  response.render('pages/index');
+  response.render('pages/index', {subdomain: randomName.choose()});
 });
+
 
 app.get('/result', function(request, response) {
-  response.render('pages/result', { result: '' });
+  response.render('pages/result-prod', { result: '' });
 });
 
-app.post('/updatePage', function(request, response) {
+app.post('/myprefix/:thesubdomain/save', function(request, response) {
 
   var userSite = new Site({
     subdomain: request.body.subdomain,
@@ -63,17 +73,37 @@ app.post('/updatePage', function(request, response) {
 });
 
 
-// Set up subdomain redirect
+// Loads full user sites
 app.get('/myprefix/:thesubdomain/', function(req, res, next){
-  console.log(req.params.thesubdomain);
   Site.find({ subdomain: req.params.thesubdomain }, function(err, site) {
     if (err) {
       throw err;
     } else {
-      res.render('pages/result-prod', { result : site[0].dom });
+      if (site[0]) {
+        res.render('pages/result-prod', { result : site[0].dom });
+      } else {
+        res.send('no such subdomain');
+      }
     }
   });
 });
+
+// Loads full user sites
+app.get('/myprefix/:thesubdomain/edit', function(req, res, next){
+  Site.find({ subdomain: req.params.thesubdomain }, function(err, site) {
+    if (err) {
+      throw err;
+    } else {
+      if (site[0]) {
+        res.render('pages/index', { resultURL : ('/myprefix/' + req.params.thesubdomain), subdomain: req.params.thesubdomain });
+      } else {
+        res.send('no such subdomain');
+      }
+    }
+  });
+});
+
+
 
 
 app.listen(app.get('port'), function() {

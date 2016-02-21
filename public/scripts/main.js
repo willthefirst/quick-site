@@ -30,9 +30,9 @@ var app = {
       $("#result").contents().find('head').append('<script id="user-js">' + app.editors.javascript.getValue() + '</script>');
 
       // Update the real shit
-      $.post("/updatePage",{
+      $.post("/save",{
         fullDOM : $("#result").contents().find('html')[0].outerHTML,
-        subdomain: "subdomain-placeholder"
+        subdomain: $('#site-subdomain').val()
       }, function(data) {
         console.log(data);
       });
