@@ -19,7 +19,7 @@ app.use( require('express-subdomain-handler')({ baseUrl: 'example.com', prefix: 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
-mongoose.connect('mongodb://localhost/website-maker');
+mongoose.connect(process.env.DATABASE_URL);
 
 var Schema = mongoose.Schema,
     ObjectId = Schema.ObjectId;
