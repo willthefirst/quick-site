@@ -26,52 +26,44 @@ var Schema = mongoose.Schema,
 
 var userSite = new Schema({
     subdomain   : String,
-    dom         : String
+    dom         : String,
+    editorCode: {
+      html: String,
+      css: String,
+      js: String
+    }
 });
 
 var Site = mongoose.model('Site', userSite);
 
 var randomName = moniker.generator([moniker.noun, moniker.noun, moniker.verb]);
 
-var concatenateHTML = function(html, css, js) {
-  
-}
-
-
-
 // Routes
-
-// Homepage -> new editor with random name
-app.get('/', function(request, response) {
-  response.render('pages/index', {subdomain: randomName.choose()});
-});
-
 
 app.get('/result', function(request, response) {
   response.render('pages/result-prod', { result: '' });
 });
 
-app.post('/myprefix/:thesubdomain/save', function(request, response) {
-
-  var userSite = new Site({
+// Saves new sites and updates existing ones
+app.post(['*/save'], function(request, response) {
+  var update = {
     subdomain: request.body.subdomain,
-    dom: request.body.fullDOM
+    dom: request.body.fullDOM,
+    editorCode: {
+      html: request.body.editorCode.html,
+      css: request.body.editorCode.css,
+      js: request.body.editorCode.js
+    }
+  }
+  Site.findOneAndUpdate({ subdomain: request.body.subdomain }, update, { upsert: true }, function(err, site) {
+    if (err) {
+      response.send(err)
+      throw err;
+    } else {
+        response.send('saved')
+    }
   });
-
-  Site.findOneAndUpdate({ subdomain: request.body.subdomain }, { dom: request.body.fullDOM }, function(err, user) {
-    if (err) throw err;
-
-    // we have the updated user returned to us
-    console.log(user);
-  });
-
-  userSite.save(function(err) {
-    if (err) throw err;
-    console.log('saved: ', userSite.subdomain, userSite.dom);
-  });
-
 });
-
 
 // Loads full user sites
 app.get('/myprefix/:thesubdomain/', function(req, res, next){
@@ -88,6 +80,17 @@ app.get('/myprefix/:thesubdomain/', function(req, res, next){
   });
 });
 
+// Homepage -> new editor with random name
+app.get('/', function(request, response) {
+  response.render('pages/index', {
+    resultURL : '',
+    subdomain: randomName.choose(),
+    htmlCode: '',
+    cssCode: '',
+    jsCode: ''
+  });
+});
+
 // Loads full user sites
 app.get('/myprefix/:thesubdomain/edit', function(req, res, next){
   Site.find({ subdomain: req.params.thesubdomain }, function(err, site) {
@@ -95,7 +98,13 @@ app.get('/myprefix/:thesubdomain/edit', function(req, res, next){
       throw err;
     } else {
       if (site[0]) {
-        res.render('pages/index', { resultURL : ('/myprefix/' + req.params.thesubdomain), subdomain: req.params.thesubdomain });
+        res.render('pages/index', {
+          resultURL : ('/myprefix/' + req.params.thesubdomain),
+          subdomain: req.params.thesubdomain,
+          htmlCode: site[0].editorCode.html,
+          cssCode: site[0].editorCode.css,
+          jsCode: site[0].editorCode.javascript
+        });
       } else {
         res.send('no such subdomain');
       }
