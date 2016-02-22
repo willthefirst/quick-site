@@ -17,6 +17,10 @@ var app = {
       this.editors[editor] = ace.edit('editor-' + editor);
       this.editors[editor].setTheme("ace/theme/chrome");
       this.editors[editor].session.setMode("ace/mode/" + editor);
+
+      // Fill in current code
+      this.editors[editor].setValue($('#editor-' + editor).data('current-code'));
+      this.editors[editor].clearSelection();
     };
   },
 
